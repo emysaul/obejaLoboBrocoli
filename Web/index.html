@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+<style type="text/css">
+
+body{
+	background-image: url("http://escobarsl.com/wp-content/uploads/2015/11/agua.png")
+
+}
+	 .LugarI{
+	 	width: 20%;
+	 	height: 250px;
+	 	float: left;
+	 	background-color: green;
+	 	border: 1px solid black;
+		position: relative;
+		border-radius: 10px;
+	 }
+
+	 .barco{
+	 	width: 10%;
+	 	height: 100px;
+		 margin: 10px;
+	 	border-right: 10px 10px 10px 10px;
+	 	text-align: center;
+	 	border: 1px solid black;
+	 	float: left;
+	   background-image: url("http://i311.photobucket.com/albums/kk475/mariayan_2008/imagenes%20sin%20fondo/CS_onthebeach_boat.png");
+	   background-size: 100%;
+	   background-repeat: no-repeat;
+		border-radius: 10px;
+
+
+	 }
+
+
+	  .LugarD{
+		border-radius: 10px;
+
+	 	width: 20%;
+	 	height: 250px;
+	
+	 	float: right;
+	 	background-color: green;
+	 	border: 1px solid black;
+		position: relative;
+
+	 } 
+
+
+
+	 img{
+	 	margin: 10px;
+	 	width: 100px;
+	 	height: 100px;
+	 	display: inline-block;
+	 	
+	 }
+
+	  .barco img {
+		margin-top:40px;
+		width: 50px;
+		height: 40px;
+		margin-left: -30px;
+
+	 }
+
+.Controles{
+	position: relative;
+}
+	 .Controles button{
+	 	color:red;
+	 	position: absolute;
+
+		margin-left:  10px;
+	 }
+
+</style>
+<link rel="stylesheet" type="text/css" href="./css/jquery-ui.css">
+<script src="./js/jquery-3.1.1.min.js"></script>
+<script src="./js/jquery-ui.js"></script>
+<script type="text/javascript">
+	
+
+// Es el lugar desde donde sale el animar
+	var lugarGet="";
+   		 function allowDefault(ev)
+		{ 
+			ev.preventDefault();
+		}
+
+
+		function drag(ev)
+		{
+			ev.dataTransfer.setData("text", ev.target.id);
+			lugarGet= document.getElementById(ev.target.id).parentNode.id
+			console.log(lugarGet);
+		}
+
+		function drop(ev)
+		{
+			ev.preventDefault();
+			var data = ev.dataTransfer.getData("text");
+	        	var lugaresdisponibles = ["p1", "p2", "p3"];
+			
+				if (verificar(lugaresdisponibles, ev.target.id)==true)
+	        	{
+	        		var lugarespermitidos = [lugarGet, ev.target.id];
+				
+
+					if (verificar(lugarespermitidos, "p3")==true)
+     				 {
+
+							if (verificar(lugarespermitidos, "p1")==true &&  $("#p3").css("margin-left")=="600px")
+							{
+								return;
+
+							}
+							
+							if (verificar(lugarespermitidos, "p2")==true &&  $("#p3").css("margin-left")=="10px")
+							{
+								return;
+
+							}
+
+								ev.target.appendChild(document.getElementById(data));
+
+				        	var elementosHijos = document.getElementById('p2').getElementsByTagName('img')
+				        	var cant=0;
+				        	$(elementosHijos).each(function(e){
+				        		cant+=1;
+				        	})
+				        	if (cant==3)
+				        	{
+				        		alert('Ganaste');
+				        	}
+					}
+					else{
+						alert("Lugar no permitido")
+					}
+					console.log(ev.target.id)
+				}
+			
+		}
+
+
+
+
+</script>
+
+</head>
+<body>
+
+<button id="back" class="">Regresar</button>
+
+		<button id="ir" class="">Llevar</button>
+<div id="p1" class="LugarI" ondrop="drop(event)" ondragover="allowDefault(event)">
+      <img id="lobo" name="img" src="./imagenes/lobo.png" ondragstart="drag(event)" draggable="true">
+      <img id="obeja" name="img"  src="./imagenes/obeja.png" ondragstart="drag(event)" draggable="true">
+      <img id="coliflor" name="img"  src="./imagenes/coliflor.png" ondragstart="drag(event)" draggable="true">
+
+</div>
+
+<div id="p3" class="barco"  ondrop="drop(event)" ondragover="allowDefault(event)">
+      
+
+
+</div>
+
+
+<div id="p2" class="LugarD"  ondrop="drop(event)" ondragover="allowDefault(event)">
+
+
+</div>
+
+
+
+
+
+<script type="text/javascript">
+
+function verificar(a, b) {
+    return a.indexOf(b) != -1
+}
+
+
+		$(document).ready(function(){
+			
+	        $(document).on("click", "#ir", function(){
+	        	
+	        	var hijosname = [];
+
+	        	$('#p3').animate({
+          			'margin-left':'600px'
+				},1500);
+
+
+	        	var elementosHijos = document.getElementById('p1').getElementsByTagName('img')
+	        	var cant = 0;
+	        	$(elementosHijos).each(function(e){
+	        		cant+=1;
+					hijosname.push($(this).attr("id"))
+
+	        	})
+
+	        	if ( verificar(hijosname, "lobo")==true && verificar(hijosname, "obeja")==true)
+	        	{
+	        		var estadoPerdiste = false;
+	        		setInterval(function(){
+	        		
+	        				if (estadoPerdiste==false)
+	        				{
+	        					estadoPerdiste=true;
+	        				alert("Perdiste")
+	        				window.location.href= window.location.href;
+
+	        				}
+
+	        		}, 1300)
+	        	}
+
+
+	        	if (verificar(hijosname, "coliflor")==true && verificar(hijosname, "obeja")==true)
+	        	{
+	        		var estadoPerdiste = false;
+	        		setInterval(function(){
+	        		
+	        				if (estadoPerdiste==false)
+	        				{
+	        					estadoPerdiste=true;
+	        				alert("Perdiste")
+	        				window.location.href= window.location.href;
+
+	        					
+	        				}
+
+	        		}, 1300)
+	        	}
+	        });
+
+
+	        $(document).on("click", "#back", function(){
+	        	var hijosname = [];
+
+	        		$('#p3').animate({
+          			'margin-left':'10px'
+				},1500);
+
+
+	        	var elementosHijos = document.getElementById('p2').getElementsByTagName('img')
+	        	var cant = 0;
+	        	$(elementosHijos).each(function(e){
+	        		cant+=1;
+					hijosname.push($(this).attr("id"))
+					console.log($(this).attr("id"));
+
+	        	})
+
+	        	if ( verificar(hijosname, "lobo")==true && verificar(hijosname, "obeja")==true)
+	        	{
+	        		var estadoPerdiste = false;
+	        		setInterval(function(){
+	        		
+	        				if (estadoPerdiste==false)
+	        				{
+	        					estadoPerdiste=true;
+	        				alert("Perdiste")
+	        				window.location.href= window.location.href;
+
+	        				}
+
+	        		}, 1300)
+	        	}
+
+
+	        	if (verificar(hijosname, "coliflor")==true && verificar(hijosname, "obeja")==true)
+	        	{
+	        		var estadoPerdiste = false;
+	        		setInterval(function(){
+	        		
+	        				if (estadoPerdiste==false)
+	        				{
+	        					estadoPerdiste=true;
+	        				alert("Perdiste")
+	        				window.location.href= window.location.href;
+	        					
+	        				}
+
+	        		}, 1300)
+	        	}
+				console.log( document.getElementById('p1').getElementsByTagName('img'))
+	        })
+
+		});
+
+
+
+</script>
+</body>
+</html>
